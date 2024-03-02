@@ -9,6 +9,15 @@ const ApartmentSchema = database.define('Apartment', {
     autoIncrement: true,
     primaryKey: true,
   },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      notNull: {
+        msg: 'Please enter the title of the apartment'
+      }
+    }
+  },
   imageUrl: {
     type: DataTypes.STRING,
     allowNull: false,
