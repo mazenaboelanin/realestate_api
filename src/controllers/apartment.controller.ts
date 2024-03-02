@@ -1,4 +1,4 @@
-import { RequestHandler } from 'express';
+import { RequestHandler, response } from 'express';
 import Apartment from '../models/apartment.model';
 
 // @desc       get all Apartments
@@ -7,7 +7,9 @@ import Apartment from '../models/apartment.model';
 export const getAllApartments: RequestHandler = async(req, res: { json: (arg0: { success: boolean; msg: string; response?: any; err?: any; }) => void; }, next)=>{
   try {
       const apartments = await Apartment.findAll();
-      res.json({success: true, msg: "Get All Apartments", response: apartments});
+      if(apartments.length === 0) return res.json({success: false, msg: "No Apartments Found" , response: []});
+
+      res.json({success: true, msg: "Get All Apartments Successfully", response: apartments});
   } catch (err) {
       res.json({success: false, msg: "Error", err});
   }
@@ -22,7 +24,9 @@ export const getApartment: RequestHandler = async(req, res: { json: (arg0: { suc
   try {
     const apartment = await Apartment.findByPk(id);
 
-    res.json({success: true, msg: "get Apartment", response: apartment});
+    if(!apartment) return res.json({success: false, msg: `No Apartment Found with ${id}` , response: null});
+
+    res.json({success: true, msg: "get Apartment Successfully", response: apartment});
   } catch (err) {
       res.json({success: false, msg: "Error", err});
   }
@@ -48,7 +52,7 @@ export const createApartment: RequestHandler = async(req, res: { json: (arg0: { 
       finished
     });
 
-    res.json({success: true, msg: "Create Apartment", response: newApartment});
+    res.json({success: true, msg: "Created Apartment Successfully", response: newApartment});
   } catch (err) {
       res.json({success: false, msg: "Error", err});
   }
