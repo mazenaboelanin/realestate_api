@@ -5,7 +5,7 @@ export const paginationService = (page: string, countPerPage: string) => {
       pageNumber = 1;
   }
   if(!count){
-      count = 10;
+      count = 5;
   }
   const limit = count;
   const skip = (pageNumber - 1) * count;

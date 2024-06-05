@@ -1,6 +1,7 @@
 import { RequestHandler, response } from 'express';
 import Apartment from '../models/apartment.model';
 import { paginationService } from '../services/pagination.service';
+import { calculateTotalPagesService } from '../services/calculateTotalPages.service';
 
 // @desc       get all Apartments
 // @route      GET api/v1/apartments
@@ -10,13 +11,17 @@ export const getAllApartments: RequestHandler = async(req, res: { json: (arg0: {
   const {skip, limit} = paginationService(page, countPerPage);
   try {
       const apartments = await Apartment.findAll({ offset: skip, limit });
+      if(apartments.length === 0) return res.json({success: false, msg: "No Apartments Found" , response: {data: []}});
 
-      console.log(page, countPerPage);
-      console.log(apartments);
+      const totalPages = await calculateTotalPagesService(Apartment, Number(countPerPage));
 
-      if(apartments.length === 0) return res.json({success: false, msg: "No Apartments Found" , response: []});
-
-      res.json({success: true, msg: "Get All Apartments Successfully", response: apartments});
+      res.json({success: true, msg: "Get All Apartments Successfully", 
+      response: {
+        data: apartments,
+        meta: {
+          totalPages,
+        }
+      }});
   } catch (err) {
       res.json({success: false, msg: "Error", err});
   }
@@ -31,9 +36,10 @@ export const getApartment: RequestHandler = async(req, res: { json: (arg0: { suc
   try {
     const apartment = await Apartment.findByPk(id);
 
-    if(!apartment) return res.json({success: false, msg: `No Apartment Found with ${id}` , response: null});
+    if(!apartment) return res.json({success: false, msg: `No Apartment Found with ${id}` , response: {data: null}});
 
-    res.json({success: true, msg: "get Apartment Successfully", response: apartment});
+    res.json({success: true, msg: "get Apartment Successfully",
+    response: { data: apartment }});
   } catch (err) {
       res.json({success: false, msg: "Error", err});
   }
@@ -59,9 +65,10 @@ export const createApartment: RequestHandler = async(req, res: { json: (arg0: { 
       finished
     });
 
-    res.json({success: true, msg: "Created Apartment Successfully", response: newApartment});
+    res.json({success: true, msg: "Created Apartment Successfully", response: {data: newApartment}});
   } catch (err) {
       res.json({success: false, msg: "Error", err});
   }
+
 }
 
