@@ -1,12 +1,19 @@
 import { RequestHandler, response } from 'express';
 import Apartment from '../models/apartment.model';
+import { paginationService } from '../services/pagination.service';
 
 // @desc       get all Apartments
 // @route      GET api/v1/apartments
 // @access     Public
-export const getAllApartments: RequestHandler = async(req, res: { json: (arg0: { success: boolean; msg: string; response?: any; err?: any; }) => void; }, next)=>{
+export const getAllApartments: RequestHandler = async(req, res: { json: (arg0: { success: boolean; msg: string; response?: any; err?: any; }) => void; }, next) => {
+  let { page, countPerPage } = req.query as { page: string, countPerPage: string };
+  const {skip, limit} = paginationService(page, countPerPage);
   try {
-      const apartments = await Apartment.findAll();
+      const apartments = await Apartment.findAll({ offset: skip, limit });
+
+      console.log(page, countPerPage);
+      console.log(apartments);
+
       if(apartments.length === 0) return res.json({success: false, msg: "No Apartments Found" , response: []});
 
       res.json({success: true, msg: "Get All Apartments Successfully", response: apartments});
