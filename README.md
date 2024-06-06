@@ -23,8 +23,6 @@ This is a React web application that lists apartments and their details
 - Cases Handled:
   - Empty State when no data found
   - Error handling when error occurs
-  - Loading indicator
-  - Page Not Found Handling
 
 ## Installation
 
