@@ -82,6 +82,10 @@ const ApartmentSchema = database.define('Apartment', {
   finished: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
+  },
+  finishedDate: {
+    type: DataTypes.DATE,
+    allowNull: true
   }
   }, 
   {
