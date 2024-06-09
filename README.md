@@ -47,6 +47,9 @@ cd <project-directory>
 npm install
 ```
 
+4. Running DB before runnning the API
+- PLEASE create a new postgres DB named: realestate ' you will find the info in database.ts'
+
 ## Running The API
 - running the API using Nodemon to have the live reload behavior
 
