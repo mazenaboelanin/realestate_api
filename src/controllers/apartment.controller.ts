@@ -2,15 +2,35 @@ import { RequestHandler, response } from 'express';
 import Apartment from '../models/apartment.model';
 import { paginationService } from '../services/pagination.service';
 import { calculateTotalPagesService } from '../services/calculateTotalPages.service';
+import { filtersService } from '../services/filters.service';
+import { orderService } from '../services/order.service';
 
 // @desc       get all Apartments
 // @route      GET api/v1/apartments
 // @access     Public
 export const getAllApartments: RequestHandler = async(req, res: { json: (arg0: { success: boolean; msg: string; response?: any; err?: any; }) => void; }, next) => {
-  let { page, countPerPage } = req.query as { page: string, countPerPage: string };
+  let { page, countPerPage, filterBy, orderBy } = req.query as { page: string, countPerPage: string, filterBy: string, orderBy: string};
   const {skip, limit} = paginationService(page, countPerPage);
   try {
-      const apartments = await Apartment.findAll({ offset: skip, limit });
+    let whereCondition: { area?: any; price?: any;} = {};
+    let OrderCondition: Array<[string, 'ASC' | 'DESC']> = [];
+
+    if(filterBy){
+      whereCondition = filtersService(filterBy);
+    }
+
+    if(orderBy){
+      OrderCondition = orderService(orderBy);
+    }
+
+    // Use the dynamically built whereCondition in the findAll query
+    const apartments = await Apartment.findAll({
+        where: whereCondition, // This now correctly applies only the filters that were provided
+        offset: skip,
+        limit,
+        order: OrderCondition 
+    });
+      
       if(apartments.length === 0) return res.json({success: false, msg: "No Apartments Found" , response: {data: []}});
 
       const totalPages = await calculateTotalPagesService(Apartment, Number(countPerPage));
