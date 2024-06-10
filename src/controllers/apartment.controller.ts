@@ -70,7 +70,7 @@ export const getApartment: RequestHandler = async(req, res: { json: (arg0: { suc
 // @route      GET api/v1/apartments
 // @access     Public
 export const createApartment: RequestHandler = async(req, res: { json: (arg0: { success: boolean; msg: string; response?: any; err?: any; }) => void; }, next)=>{
-  const {title, imageUrl, description, area, compound, price, city, phoneNumber, paymentType, finished} = req?.body;
+  const {title, imageUrl, description, area, compound, price, city, phoneNumber, paymentType, finished, finishedDate} = req?.body;
   try {
     const newApartment = await Apartment.create({
       title,
@@ -82,7 +82,8 @@ export const createApartment: RequestHandler = async(req, res: { json: (arg0: { 
       city,
       phoneNumber,
       paymentType,
-      finished
+      finished,
+      finishedDate
     });
 
     res.json({success: true, msg: "Created Apartment Successfully", response: {data: newApartment}});
