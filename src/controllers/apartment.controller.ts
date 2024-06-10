@@ -33,7 +33,7 @@ export const getAllApartments: RequestHandler = async(req, res: { json: (arg0: {
       
       if(apartments.length === 0) return res.json({success: false, msg: "No Apartments Found" , response: {data: []}});
 
-      const totalPages = await calculateTotalPagesService(Apartment, Number(countPerPage));
+      const totalPages = await calculateTotalPagesService(Apartment, Number(countPerPage), whereCondition);
 
       res.json({success: true, msg: "Get All Apartments Successfully", 
       response: {
@@ -93,3 +93,25 @@ export const createApartment: RequestHandler = async(req, res: { json: (arg0: { 
 
 }
 
+
+// Create new controller function that can create array of apartments
+// @desc       create new Apartments
+// @route      POST api/v1/apartments/bulk
+// @access     Public
+export const createApartments: RequestHandler = async(req, res: { json: (arg0: { success: boolean; msg: string; response?: any; err?: any; }) => void; }, next)=>{
+  const apartments = req?.body;
+  console.log('*********** ');
+  console.log('*********** ');
+  console.log('*********** ');
+  console.log('*********** ',apartments);
+  console.log('*********** ');
+  console.log('*********** ');
+  console.log('*********** ');
+  // try {
+  //   const newApartments = await Apartment.bulkCreate(apartments);
+
+  //   res.json({success: true, msg: "Created Apartments Successfully", response: {data: newApartments}});
+  // } catch (err) {
+  //     res.json({success: false, msg: "Error", err});
+  // }
+}
