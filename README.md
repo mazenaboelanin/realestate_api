@@ -9,9 +9,14 @@ This is a React web application that lists apartments and their details
   - User can create a new Apartment with data specified in the Body
 
 - Apartment Listing API:
-  - Endpoint Example: GET `http://localhost:5000/api/v1/apartments?page=${pageNumber}&countPerPage=${count}`
+  - Endpoint Example 1: GET `http://localhost:5000/api/v1/apartments?page=${pageNumber}&countPerPage=${count}`
+  - Endpoint Example 2: GET `http://localhost:5000/api/v1/apartments?page=${pageNumber}&countPerPage=${count}&filterBy={"area":{"min":150,"max":170},"price":{"min":1.6,"max":2}}&orderBy={"orderBy":"price","orderType":"DESC"}`
   - Users can get a huge list of apartments
   - Apartments paginated
+  - Filter by:
+      - Area, Price
+  - Order by:
+      - Date, Area, Price 
   - Get total pages count depending on the apartments count
 
 - Apartment Details API: 
@@ -59,4 +64,4 @@ npm run dev
 
 ## Future Plan
 
-- adding Filters to filter apartments according to areas, compounds and other criterias
+- adding Filters to filter apartments according to Finished, and Compound
